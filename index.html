@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foundation Models in Robotics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a73e8;
+            --primary-dark: #0d47a1;
+            --secondary: #00c853;
+            --dark: #202124;
+            --light: #f8f9fa;
+            --gray: #5f6368;
+            --card-bg: #ffffff;
+            --border: #dadce0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7fa;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 80px 0 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+        }
+        
+        .header-content {
+            position: relative;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header-content p {
+            font-size: 1.4rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .author-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255,255,255,0.2);
+            border-radius: 30px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .author-badge img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 2px solid white;
+            background: #ddd;
+        }
+        
+        /* Navigation */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 15px 30px;
+            margin: 5px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        
+        .tab:hover, .tab.active {
+            background: white;
+            color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        /* Main Content */
+        main {
+            padding: 60px 0;
+        }
+        
+        .section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+            padding: 40px;
+            margin-bottom: 40px;
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+        }
+        
+        .section h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section h2 i {
+            margin-right: 15px;
+            background: rgba(26, 115, 232, 0.1);
+            width: 60px;
+            height: 60px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .section h3 {
+            color: var(--primary-dark);
+            margin: 25px 0 15px;
+            font-size: 1.5rem;
+        }
+        
+        .section p {
+            margin-bottom: 15px;
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+        
+        .highlight {
+            background: rgba(26, 115, 232, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .concept-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        .concept-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            background: rgba(26, 115, 232, 0.1);
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .concept-card h4 {
+            font-size: 1.3rem;
+            margin: 15px 0 10px;
+            color: var(--dark);
+        }
+        
+        .model-showcase {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .model-card {
+            flex: 1;
+            min-width: 280px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+        
+        .model-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+        
+        .model-card ul {
+            padding-left: 20px;
+            margin-top: 10px;
+        }
+        
+        .model-card ul li {
+            margin-bottom: 8px;
+        }
+        
+        .challenges-list {
+            margin: 25px 0;
+        }
+        
+        .challenges-list li {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+            list-style-type: none;
+        }
+        
+        .challenges-list li::before {
+            content: "!";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 22px;
+            height: 22px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .footer-content p {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .social-icons a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header-content p {
+                font-size: 1.1rem;
+            }
+            
+            .section {
+                padding: 30px 20px;
+            }
+            
+            .section h2 {
+                font-size: 1.8rem;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .tab {
+                width: 90%;
+                margin: 5px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Foundation Models in Robotics</h1>
+                <p>A Revolution in the Making</p>
+                <div class="author-badge">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23334'/><circle cx='50' cy='40' r='20' fill='%23fff'/><path d='M30,85 Q50,70 70,85' stroke='%23fff' stroke-width='8' fill='none'/></svg>" alt="Author">
+                    <div>
+                        <strong>PhD Researcher in Robotics & Computer Vision</strong>
+                        <div>LinkedIn Audience Summary</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active">Overview</div>
+            <div class="tab">Fundamentals</div>
+            <div class="tab">Applications</div>
+            <div class="tab">Challenges</div>
+            <div class="tab">Future Directions</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Introduction Section -->
+        <section class="section">
+            <h2><i class="fas fa-robot"></i> Revolutionizing Robotics</h2>
+            <p>Foundation models, pre-trained on vast internet-scale data, are poised to revolutionize robotics by offering superior generalization capabilities and emergent abilities to solve problems not present in their training data.</p>
+            
+            <div class="highlight">
+                <p>Unlike traditional deep learning models in robotics, which are often limited by small, task-specific datasets, foundation models promise to enhance every component of the robot autonomy stack:</p>
+                <ul>
+                    <li><strong>Perception:</strong> Understanding and interpreting sensory data</li>
+                    <li><strong>Decision-making:</strong> Planning and selecting appropriate actions</li>
+                    <li><strong>Control:</strong> Executing precise movements</li>
+                </ul>
+            </div>
+            
+            <p>The integration of Large Language Models (LLMs) and Vision-Language Models (VLMs) unlocks new possibilities in:</p>
+            <div class="model-showcase">
+                <div class="model-card">
+                    <h4>Robotics Domains</h4>
+                    <ul>
+                        <li>Autonomous driving</li>
+                        <li>Household robotics</li>
+                        <li>Industrial robotics</li>
+                        <li>Assistive robotics</li>
+                        <li>Medical robotics</li>
+                        <li>Field robotics</li>
+                        <li>Multi-robot systems</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fundamentals Section -->
+        <section class="section">
+            <h2><i class="fas fa-cogs"></i> Key Concepts</h2>
+            <p>To understand foundation models, it's essential to grasp these fundamental concepts:</p>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <i class="fas fa-puzzle-piece"></i>
+                    <h4>Tokenization</h4>
+                    <p>Dividing sequences of characters or data modalities into smaller 'tokens' that are mapped to numerical vectors for processing.</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-brain"></i>
+                    <h4>Transformer Architecture</h4>
+                    <p>Uses multi-head self-attention to capture long-term dependencies and global patterns in input data.</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-dna"></i>
+                    <h4>Generative Models</h4>
+                    <p>Learn to sample from probability distributions to create new data examples (e.g., DALL-E for text-to-image).</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-filter"></i>
+                    <h4>Discriminative Models</h4>
+                    <p>Trained for tasks like classification by learning boundaries between different classes.</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-redo"></i>
+                    <h4>Autoregressive Models</h4>
+                    <p>Predict next data points in sequences by recursively ingesting previous outputs (e.g., GPT models).</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-mask"></i>
+                    <h4>Masked Auto-Encoding</h4>
+                    <p>Enables bidirectional predictions by masking tokens and requiring the model to predict them (e.g., BERT).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Applications Section -->
+        <section class="section">
+            <h2><i class="fas fa-rocket"></i> Practical Applications</h2>
+            <p>Foundation models are transforming robotics capabilities across multiple domains:</p>
+            
+            <h3>Decision-Making and Control</h3>
+            <ul>
+                <li><strong>Language-conditioned Imitation Learning:</strong> CLIPort and PerAct leverage CLIP for semantic reasoning</li>
+                <li><strong>Language-Assisted Reinforcement Learning:</strong> LLMs enhance RL by decomposing complex tasks</li>
+                <li><strong>Robot Task Planning:</strong> LLMs generate high-level plans and executable code</li>
+            </ul>
+            
+            <div class="model-showcase">
+                <div class="model-card">
+                    <h4>Notable Models</h4>
+                    <ul>
+                        <li><strong>RT-1 & RT-2:</strong> Vision-language-action models trained on real-world robotic experiences</li>
+                        <li><strong>RT-X:</strong> Cross-embodied model trained on 22 different robots</li>
+                        <li><strong>SayCan:</strong> Integrates LLMs with affordance functions</li>
+                        <li><strong>VoxPoser:</strong> Uses LLMs to generate 3D value maps for motion planning</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>Perception</h3>
+            <p>Foundation models enhance robots' ability to interpret sensory data:</p>
+            <ul>
+                <li><strong>Open-Vocabulary Object Detection:</strong> Identify unseen objects (GLIP, OWL-ViT)</li>
+                <li><strong>3D Classification:</strong> PointCLIP and ULIP transfer 2D knowledge to 3D point clouds</li>
+                <li><strong>Semantic Segmentation:</strong> Segment Anything Model (SAM) for zero-shot segmentation</li>
+            </ul>
+            
+            <h3>Embodied AI</h3>
+            <p>Developing generalist agents that interact with physical worlds:</p>
+            <ul>
+                <li><strong>Gato:</strong> Multi-modal, multi-task, multi-embodiment policy</li>
+                <li><strong>Simulators:</strong> iGibson, Habitat, RoboTHOR for training and evaluation</li>
+                <li><strong>Exploring with LLMs (ELLM):</strong> Guides agents toward meaningful behavior</li>
+            </ul>
+        </section>
+
+        <!-- Challenges Section -->
+        <section class="section">
+            <h2><i class="fas fa-exclamation-triangle"></i> Key Challenges</h2>
+            <p>Significant obstacles remain for widespread adoption:</p>
+            
+            <div class="challenges-list">
+                <li><strong>Data Scarcity:</strong> Limited robotics-specific data compared to text/image data</li>
+                <li><strong>Real-Time Performance:</strong> High inference time hinders deployment</li>
+                <li><strong>Multimodal Representation:</strong> Difficulty integrating diverse modalities</li>
+                <li><strong>Uncertainty Quantification:</strong> Critical for safe deployment (KNOWNO)</li>
+                <li><strong>Safety Evaluation:</strong> Rigorous testing needed before deployment</li>
+                <li><strong>High Variability:</strong> Diverse robot platforms and environments</li>
+                <li><strong>Benchmarking:</strong> Challenges in reproducibility and comparison</li>
+            </div>
+            
+            <div class="highlight">
+                <h4>Solutions in Development</h4>
+                <ul>
+                    <li>Using unstructured play data and human videos</li>
+                    <li>Data augmentation with generative AI (Stable Diffusion)</li>
+                    <li>Synthetic data generation via high-fidelity simulation</li>
+                    <li>Distilling large models into smaller specialized versions</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Future Directions Section -->
+        <section class="section">
+            <h2><i class="fas fa-binoculars"></i> Future Directions</h2>
+            <p>The path forward for foundation models in robotics:</p>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <i class="fas fa-database"></i>
+                    <h4>Scalable Data Solutions</h4>
+                    <p>Developing efficient methods to collect and utilize diverse robotic data across embodiments.</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-bolt"></i>
+                    <h4>Real-Time Optimization</h4>
+                    <p>Creating specialized models that maintain performance while reducing inference time.</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Safety Frameworks</h4>
+                    <p>Establishing formal methods for uncertainty quantification and failure prediction.</p>
+                </div>
+                
+                <div class="concept-card">
+                    <i class="fas fa-sync-alt"></i>
+                    <h4>Sim-to-Real Transfer</h4>
+                    <p>Improving techniques to bridge the gap between simulation and real-world deployment.</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <p><strong>The ultimate goal:</strong> Foundation models that enable robots to understand and interact with the physical world as effectively as humans do, adapting to novel situations and learning continuously from their experiences.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h3>Foundation Models in Robotics</h3>
+                <p>A comprehensive survey of applications, challenges, and future directions</p>
+                
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                </div>
+                
+                <div class="copyright">
+                    &copy; 2023 PhD Research in Robotics & Computer Vision. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Simple tab navigation
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            const sections = document.querySelectorAll('.section');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Get the index of the clicked tab
+                    const index = Array.from(tabs).indexOf(this);
+                    
+                    // Hide all sections
+                    sections.forEach(section => {
+                        section.style.display = 'none';
+                    });
+                    
+                    // Show the corresponding section
+                    if (sections[index]) {
+                        sections[index].style.display = 'block';
+                    }
+                });
+            });
+            
+            // Show first section by default
+            if (sections[0]) {
+                sections[0].style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
