@@ -165,6 +165,14 @@
             color: var(--primary-dark);
             margin: 25px 0 15px;
             font-size: 1.5rem;
+            border-left: 4px solid var(--primary);
+            padding-left: 15px;
+        }
+        
+        .section h4 {
+            color: var(--primary-dark);
+            margin: 20px 0 10px;
+            font-size: 1.2rem;
         }
         
         .section p {
@@ -280,6 +288,78 @@
             font-weight: bold;
         }
         
+        .case-study {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .implementation-steps {
+            counter-reset: step-counter;
+            margin: 30px 0;
+        }
+        
+        .step {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 30px;
+        }
+        
+        .step::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 36px;
+            height: 36px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+        
+        .resource-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        
+        .resource-card h4 {
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .resource-card h4 i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
         /* Footer */
         footer {
             background: var(--dark);
@@ -386,8 +466,10 @@
             <div class="tab active">Overview</div>
             <div class="tab">Fundamentals</div>
             <div class="tab">Applications</div>
+            <div class="tab">Case Studies</div>
+            <div class="tab">Implementation</div>
+            <div class="tab">Resources</div>
             <div class="tab">Challenges</div>
-            <div class="tab">Future Directions</div>
         </div>
     </div>
 
@@ -507,6 +589,153 @@
                 <li><strong>Simulators:</strong> iGibson, Habitat, RoboTHOR for training and evaluation</li>
                 <li><strong>Exploring with LLMs (ELLM):</strong> Guides agents toward meaningful behavior</li>
             </ul>
+        </section>
+
+        <!-- Case Studies Section -->
+        <section class="section">
+            <h2><i class="fas fa-microscope"></i> Real-World Case Studies</h2>
+            <p>Foundation models are being successfully implemented in diverse robotics applications:</p>
+            
+            <div class="case-study">
+                <h3>Automated Facility Inspection at Mitsubishi Chemical</h3>
+                <p><strong>Challenge:</strong> Labor-intensive equipment inspections in hazardous environments with safety risks .</p>
+                <p><strong>Solution:</strong> Quadruped robot with AI-powered computer vision and active sensing technology:</p>
+                <ul>
+                    <li>AR markers for precise navigation</li>
+                    <li>Vibration analysis using computer vision</li>
+                    <li>Real-time anomaly detection</li>
+                </ul>
+                <p><strong>Results:</strong> 65% reduction in inspection time, improved worker safety, and early detection of pipeline issues with 0.34mm amplitude sensitivity .</p>
+            </div>
+            
+            <div class="case-study">
+                <h3>Agricultural Drone Systems by Precision AI</h3>
+                <p><strong>Challenge:</strong> Creating AI models that work across all plant growth stages .</p>
+                <p><strong>Solution:</strong> High-quality data annotation for drone vision systems:</p>
+                <ul>
+                    <li>Multi-stage crop recognition models</li>
+                    <li>Domain adaptation techniques</li>
+                    <li>99% annotation accuracy</li>
+                </ul>
+                <p><strong>Results:</strong> Precision spraying reduced herbicide usage by 90% while maintaining crop yield .</p>
+            </div>
+            
+            <div class="case-study">
+                <h3>Visual Inspection Systems at SDU Robotics</h3>
+                <p><strong>Challenge:</strong> Recognizing assembly failures with minimal training data .</p>
+                <p><strong>Solution:</strong> Few-shot learning with synthetic data generation:</p>
+                <ul>
+                    <li>Simulated images for training</li>
+                    <li>Domain randomization techniques</li>
+                    <li>Unsupervised feature learning</li>
+                </ul>
+                <p><strong>Results:</strong> 40% reduction in training data requirements while maintaining 95% defect detection accuracy .</p>
+            </div>
+        </section>
+
+        <!-- Implementation Section -->
+        <section class="section">
+            <h2><i class="fas fa-tasks"></i> Implementation Roadmap</h2>
+            <p>Practical steps for deploying foundation models in robotics systems:</p>
+            
+            <div class="implementation-steps">
+                <div class="step">
+                    <h4>Problem Definition & Data Collection</h4>
+                    <p>Identify specific robotics task and gather multimodal datasets (vision, language, sensor data). Use techniques like SLAM algorithms to augment sensors and accumulate point clouds .</p>
+                </div>
+                
+                <div class="step">
+                    <h4>Model Selection & Adaptation</h4>
+                    <p>Choose appropriate foundation model (LLM, VLM, or hybrid) and fine-tune using domain-specific data. Consider computational constraints for real-time performance.</p>
+                </div>
+                
+                <div class="step">
+                    <h4>Data Annotation & Processing</h4>
+                    <p>Implement high-quality annotation workflows for 2D/3D data using tools like Sama's platform that supports up to 14 sensors and multiple point-clouds . Apply domain randomization techniques.</p>
+                </div>
+                
+                <div class="step">
+                    <h4>System Integration</h4>
+                    <p>Develop API connections between foundation models and robotic systems. Implement safety layers like KNOWNO for uncertainty quantification.</p>
+                </div>
+                
+                <div class="step">
+                    <h4>Simulation Testing</h4>
+                    <p>Validate in high-fidelity simulators (iGibson, Habitat) before real-world deployment. Use domain transfer techniques to bridge sim-to-real gap.</p>
+                </div>
+                
+                <div class="step">
+                    <h4>Deployment & Monitoring</h4>
+                    <p>Implement edge deployment with fallback mechanisms. Continuously monitor performance with tools like conformal prediction for uncertainty quantification.</p>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <h4>Pro Tips for Implementation</h4>
+                <ul>
+                    <li>Start with constrained environments before scaling to open-world settings</li>
+                    <li>Use foundation models for high-level planning while retaining traditional controls for safety-critical operations</li>
+                    <li>Implement human-in-the-loop systems for continuous improvement</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Learning Resources Section -->
+        <section class="section">
+            <h2><i class="fas fa-graduation-cap"></i> Learning Resources</h2>
+            <p>Curated resources to deepen your understanding of foundation models in robotics:</p>
+            
+            <div class="resources-grid">
+                <div class="resource-card">
+                    <h4><i class="fas fa-book"></i> Foundational Courses</h4>
+                    <ul>
+                        <li>Robotics PhD Programs (CMU, MIT, Stanford) </li>
+                        <li>SDU Robotics Computer Vision Curriculum </li>
+                        <li>Deep Learning for Robotics (Coursera Specialization)</li>
+                        <li>Transformer Architectures (Stanford CS224N)</li>
+                    </ul>
+                </div>
+                
+                <div class="resource-card">
+                    <h4><i class="fas fa-laptop-code"></i> Hands-On Tools</h4>
+                    <ul>
+                        <li>ROS 2 with Foundation Models Integration</li>
+                        <li>NVIDIA Isaac Sim for Simulation</li>
+                        <li>Hugging Face Transformers for Robotics</li>
+                        <li>Sama Annotation Platform </li>
+                    </ul>
+                </div>
+                
+                <div class="resource-card">
+                    <h4><i class="fas fa-file-alt"></i> Research Papers</h4>
+                    <ul>
+                        <li>RT-1 & RT-2: Robotics Transformer Papers</li>
+                        <li>VoxPoser: Composable 3D Value Maps</li>
+                        <li>SayCan: Do As I Can, Not As I Say</li>
+                        <li>Foundation Models for Decision Making</li>
+                    </ul>
+                </div>
+                
+                <div class="resource-card">
+                    <h4><i class="fas fa-database"></i> Datasets</h4>
+                    <ul>
+                        <li>RT-X Cross-Robot Dataset</li>
+                        <li>SA-1B Segmentation Dataset</li>
+                        <li>TartanAir: Simulated Robotics Data</li>
+                        <li>Open X-Embodiment Dataset</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="highlight">
+                <h4>Practice Recommendations</h4>
+                <ul>
+                    <li>Start with pre-trained models and fine-tune on specific robotics tasks</li>
+                    <li>Participate in robotics challenges (RoboCup, DARPA SubT)</li>
+                    <li>Implement small-scale projects using Gazebo/PyBullet simulations</li>
+                    <li>Contribute to open-source robotics projects (ROS 2, PyRobot)</li>
+                </ul>
+            </div>
         </section>
 
         <!-- Challenges Section -->
